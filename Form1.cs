@@ -16,26 +16,24 @@ namespace FightForFunWF
         {
             InitializeComponent();
             //Form1.Location = new Point(10, 10);
-            
         }
-
-        public static bool winterIsComing = false;
-        public static int size = 15; // fieldSize
-        public static char [,] board = new char[size, size];
-        Button[,] buttons = new Button[size, size];
+        Obstacle obs;
+        Board board;
+        
+        Button[,] buttons = new Button[Board.boardSize, Board.boardSize];
         int top = 2;
         int left = 2;
-        int buttonSize = 47;
+        int buttonSize = 64;
         Random rnd = new Random();
         private void Form1_Load(object sender, EventArgs e)
         {
-            winterIsComing = RandomBool();
+            Board.winterIsComing = RandomBool();
             panelMain.Width = 768;
             panelMain.Height = 768;
 
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < Board.boardSize; i++)
             {
-                for (int j = 0; j < size; j++)
+                for (int j = 0; j < Board.boardSize; j++)
                 {
                     Button btn = new Button();
                     float new_size = 11.0f;
@@ -44,112 +42,118 @@ namespace FightForFunWF
                     int value = GenerateRandomDigit(rnd);
                     btn.Text = value.ToString();
                     btn.Text = String.Empty;
-                    btn.Tag = "btn" + i.ToString() + j.ToString();
+                    btn.Tag = $"[{i},{j}]";
                     btn.Location = new Point(top, left);
                     btn.Top = top;
                     btn.Left = left;
                     btn.Width = buttonSize;
                     btn.Height = buttonSize;
                     btn.BackColor = value < 0 ? Color.Coral : Color.Aqua;
-                    btn.BackColor = winterIsComing ? Color.White : Color.Green;
+                    btn.BackColor = Board.winterIsComing ? Color.White : Color.Green;
                     buttons[i, j] = btn;
                     buttons[i, j].Click += btns_Click;
                     panelMain.Controls.Add(buttons[i, j]);
                     top += btn.Height;// + 1;
-                    if (j == size - 1)
+                    if (j == Board.boardSize - 1)
                     {
                         left += buttonSize;
                         top = 2;
                     }
                 }
             }
-
-            
-            BoardInit(); // unit & obstacles image
+            Restart();
         }
 
-        private void SetObstacles()
+        public void Restart(){
+            Board.SetStartPosition();
+            Board.BoardInit();
+            SetAllUnits();
+        }
+
+        private void SetAllUnits()
         {
-            Image water;
-            Image earth;
-            if (winterIsComing)
+            for (int i = 0; i < Board.boardSize; i++)
             {
-                water = Properties.Resources.iceblock;
-                earth = Properties.Resources.swamp;
-            } else
-            {
-                water = Properties.Resources.river;
-                earth = Properties.Resources.sand;
+                for (int j = 0; j < Board.boardSize; j++)
+                {
+                    SetUnitAt(i, j);
+                }
             }
-            buttons[0, 3].Image = water;
-            buttons[0, 11].Image = earth;
+        }
+        public void SetUnitAt(int i, int j){
+            buttons[i, j].BackgroundImage = GetUnitAt(i, j);
+            buttons[i, j].BackgroundImageLayout = ImageLayout.Stretch;
         }
 
-        private void SetUnits()
+        private Image GetUnitAt(int i, int j)
         {
-            buttons[0, 0].Image = Properties.Resources.BlueTank;
-            buttons[0, 1].Image = Properties.Resources.BlueTank;
-            buttons[14, 0].Image = Properties.Resources.BlueTank;
-            buttons[14, 1].Image = Properties.Resources.BlueTank;
-
-            buttons[2, 0].Image = Properties.Resources.BlueInfantry;
-            buttons[2, 1].Image = Properties.Resources.BlueInfantry;
-            buttons[3, 0].Image = Properties.Resources.BlueInfantry;
-            buttons[3, 1].Image = Properties.Resources.BlueInfantry;
-
-            buttons[12, 0].Image = Properties.Resources.BlueInfantry;
-            buttons[12, 1].Image = Properties.Resources.BlueInfantry;
-            buttons[11, 0].Image = Properties.Resources.BlueInfantry;
-            buttons[11, 1].Image = Properties.Resources.BlueInfantry;
-
-            buttons[5, 0].Image = Properties.Resources.BlueCavalry;
-            buttons[5, 1].Image = Properties.Resources.BlueCavalry;
-            buttons[6, 1].Image = Properties.Resources.BlueCavalry;
-
-            buttons[9, 0].Image = Properties.Resources.BlueCavalry;
-            buttons[9, 1].Image = Properties.Resources.BlueCavalry;
-            buttons[8, 1].Image = Properties.Resources.BlueCavalry;
-
-            buttons[6, 0].Image = Properties.Resources.BlueArtillery;
-            buttons[7, 1].Image = Properties.Resources.BlueArtillery;
-            buttons[8, 0].Image = Properties.Resources.BlueArtillery;
-
-            buttons[7, 0].Image = Properties.Resources.BlueKing;
-
-            buttons[0, 14].Image = Properties.Resources.RedTank;
-            buttons[0, 13].Image = Properties.Resources.RedTank;
-            buttons[14, 14].Image = Properties.Resources.RedTank;
-            buttons[14, 13].Image = Properties.Resources.RedTank;
-
-            buttons[2, 14].Image = Properties.Resources.RedInfantry;
-            buttons[2, 13].Image = Properties.Resources.RedInfantry;
-            buttons[3, 14].Image = Properties.Resources.RedInfantry;
-            buttons[3, 13].Image = Properties.Resources.RedInfantry;
-
-            buttons[12, 14].Image = Properties.Resources.RedInfantry;
-            buttons[12, 13].Image = Properties.Resources.RedInfantry;
-            buttons[11, 14].Image = Properties.Resources.RedInfantry;
-            buttons[11, 13].Image = Properties.Resources.RedInfantry;
-
-            buttons[5, 14].Image = Properties.Resources.RedCavalry;
-            buttons[5, 13].Image = Properties.Resources.RedCavalry;
-            buttons[6, 13].Image = Properties.Resources.RedCavalry;
-
-            buttons[9, 14].Image = Properties.Resources.RedCavalry;
-            buttons[9, 13].Image = Properties.Resources.RedCavalry;
-            buttons[8, 13].Image = Properties.Resources.RedCavalry;
-
-            buttons[6, 14].Image = Properties.Resources.RedArtillery;
-            buttons[7, 13].Image = Properties.Resources.RedArtillery;
-            buttons[8, 14].Image = Properties.Resources.RedArtillery;
-
-            buttons[7, 14].Image = Properties.Resources.RedKing;
-        }
-
-        private void BoardInit()
-        {
-            SetObstacles();
-            SetUnits();
+            Image currentUnit = Properties.Resources.ground;
+            switch (Board.gameField[i, j])
+            {
+                case 'P':
+                    currentUnit = Properties.Resources.BlueInfantry;
+                    break;
+                case 'p':
+                    currentUnit = Properties.Resources.RedInfantry;
+                    break;
+                case 'N':
+                    currentUnit = Properties.Resources.BlueCavalry;
+                    break;
+                case 'n':
+                    currentUnit = Properties.Resources.RedCavalry;
+                    break;
+                case 'T':
+                    currentUnit = Properties.Resources.BlueTank;
+                    break;
+                case 't':
+                    currentUnit = Properties.Resources.RedTank;
+                    break;
+                case 'A':
+                    currentUnit = Properties.Resources.BlueArtillery;
+                    break;
+                case 'a':
+                    currentUnit = Properties.Resources.RedArtillery;
+                    break;
+                case 'K':
+                    currentUnit = Properties.Resources.BlueKing;
+                    break;
+                case 'k':
+                    currentUnit = Properties.Resources.RedKing;
+                    break;
+                case '0':
+                    currentUnit = Properties.Resources.ground;
+                    break;
+                case '1':
+                    currentUnit = Properties.Resources.forest;
+                    break;
+                case '2':
+                    if (Board.winterIsComing)
+                    {
+                        currentUnit = Properties.Resources.iceblock;
+                    }
+                    else
+                    {
+                        currentUnit = Properties.Resources.river;
+                    }
+                    break;
+                case '3':
+                    if (Board.winterIsComing)
+                    {
+                        currentUnit = Properties.Resources.swamp;
+                    }
+                    else
+                    {
+                        currentUnit = Properties.Resources.sand;
+                    }
+                    break;
+                case '4':
+                    currentUnit = Properties.Resources.bomb;
+                    break;
+                case '5':
+                    currentUnit = Properties.Resources.barbware;
+                    break;
+            }
+            return currentUnit;
         }
 
         private int GenerateRandomDigit(Random rng)
@@ -164,12 +168,20 @@ namespace FightForFunWF
 
         private void btns_Click(object sender, EventArgs e)
         {
-            throw new NotImplementedException();
+            Button button = sender as Button;            
+            btn_Restart.Text = button.Tag.ToString();
+            //btn_Restart.Text = $"X{MousePosition.X.ToString()}, Y{MousePosition.Y.ToString()}";
+            
         }
 
         private void BtnExit_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void btn_Restart_Click(object sender, EventArgs e)
+        {
+            Restart();
         }
     }
 }

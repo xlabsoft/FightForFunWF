@@ -36,16 +36,17 @@
             // panelMain
             // 
             this.panelMain.Location = new System.Drawing.Point(0, 0);
-            this.panelMain.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.panelMain.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.panelMain.Name = "panelMain";
-            this.panelMain.Size = new System.Drawing.Size(864, 960);
+            this.panelMain.Size = new System.Drawing.Size(576, 624);
             this.panelMain.TabIndex = 0;
             // 
             // btnExit
             // 
-            this.btnExit.Location = new System.Drawing.Point(1248, 12);
+            this.btnExit.Location = new System.Drawing.Point(832, 8);
+            this.btnExit.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(75, 44);
+            this.btnExit.Size = new System.Drawing.Size(50, 29);
             this.btnExit.TabIndex = 1;
             this.btnExit.Text = "CLOSE";
             this.btnExit.UseVisualStyleBackColor = true;
@@ -53,24 +54,26 @@
             // 
             // btn_Restart
             // 
-            this.btn_Restart.Location = new System.Drawing.Point(1248, 81);
+            this.btn_Restart.Location = new System.Drawing.Point(832, 53);
+            this.btn_Restart.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_Restart.Name = "btn_Restart";
-            this.btn_Restart.Size = new System.Drawing.Size(75, 58);
+            this.btn_Restart.Size = new System.Drawing.Size(50, 38);
             this.btn_Restart.TabIndex = 4;
             this.btn_Restart.Text = "Restart";
             this.btn_Restart.UseVisualStyleBackColor = true;
+            this.btn_Restart.Click += new System.EventHandler(this.btn_Restart_Click);
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1349, 1050);
+            this.ClientSize = new System.Drawing.Size(867, 679);
             this.Controls.Add(this.btn_Restart);
             this.Controls.Add(this.btnExit);
             this.Controls.Add(this.panelMain);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Location = new System.Drawing.Point(5, 5);
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "FightForFun";
